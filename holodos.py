@@ -111,7 +111,7 @@ def update_page_buttons():
   total_pages = (len(item_quantities) + ITEMS_PER_PAGE - 1) // ITEMS_PER_PAGE
   prev_button.config(state=("disabled" if (current_page == 1) else "normal"))
   next_button.config(state=("disabled" if (current_page == total_pages or len(item_quantities) == 0) else "normal"))
-  if search_entry.get().lower():
+  if search_entry.get():
       prev_button.config(state="disabled")
       next_button.config(state="disabled")
   else:
