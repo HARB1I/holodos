@@ -104,13 +104,14 @@ def update_listbox(search_term=""):
 #изменение даты до того как продукт просрочится
 def update_expirations_date(item):
     try:
-        new_date_str = simpledialog.askstring("Изменение срока годности", "Введите новый срок годности в формате ДД.ММ.ГГГГ:", initialvalue=expiration_dates.get(""))
+        new_date_str = simpledialog.askstring("Изменение срока годности", f"Введите новый срок годности продукта \"{item}\" в формате ДД.ММ.ГГГГ:", initialvalue=expiration_dates.get(""))
         if new_date_str:
                 new_date = datetime.strptime(new_date_str, "%d.%m.%Y").date()
                 expiration_dates[item] = new_date
                 update_listbox()
     except ValueError:
-            messagebox.showerror("Ошибка", "Неверный формат даты. Используйте ДД.ММ.ГГГГ")
+            messagebox.showwarning("Ошибка", "Неверный формат даты. Используйте ДД.ММ.ГГГГ")
+            update_expirations_date(item)
 #------------------------------------------------------------------------------
 #блокировка кнопок навигации
 def update_page_buttons():
