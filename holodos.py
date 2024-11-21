@@ -91,7 +91,7 @@ def update_listbox(search_term=""):
     sub_button.pack(side=RIGHT)
     change_button = Button(item_frame, text="⌫",command=lambda item=item: update_expirations_date(item), width=2)
     change_button.pack(side=RIGHT)
-
+  
   update_page_buttons()
   auto_prev_page()
 #------------------------------------------------------------------------------
@@ -111,6 +111,12 @@ def update_page_buttons():
   total_pages = (len(item_quantities) + ITEMS_PER_PAGE - 1) // ITEMS_PER_PAGE
   prev_button.config(state=("disabled" if (current_page == 1) else "normal"))
   next_button.config(state=("disabled" if (current_page == total_pages or len(item_quantities) == 0) else "normal"))
+  if search_entry.get().lower():
+      prev_button.config(state="disabled")
+      next_button.config(state="disabled")
+  else:
+      prev_button.config(state="normal")
+      next_button.config(state="normal")
 #------------------------------------------------------------------------------
 #переход на предыдущую страницу
 def prev_page():
