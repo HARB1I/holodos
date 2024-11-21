@@ -1,4 +1,7 @@
 from tkinter import *
+from tkinter import simpledialog
+from tkinter import messagebox
+from datetime import *
 
 search_frame_visible = False
 ITEMS_PER_PAGE = 8
@@ -29,6 +32,7 @@ def toggle_search_frame(visible):
     search_frame.grid_forget()
 
 #------------------------------------------------------------------------------
+#поисковик
 def search_listbox(event=None):
   search_term = search_entry.get().lower()
   update_listbox(search_term)
@@ -39,6 +43,7 @@ def update_quantity(item, amount):
   item_quantities[item] += amount
   if item_quantities[item] <= 0:
     del item_quantities[item]
+    del expiration_dates[item]
   update_listbox()
 
 #------------------------------------------------------------------------------
@@ -50,12 +55,14 @@ def add_item():
       messagebox.showwarning("Ошибка", "Этот продукт уже существует!")
     else:
       item_quantities[new_item] = 0
+      expiration_dates[new_item] = date(2024, 1, 1)
       update_listbox()
       new_item_entry.delete(0,END)
   else:
     messagebox.showwarning("Ошибка","Введите название продукта")
 
 #--------------------------------------------------------------------------------------------------------------
+#перезагрузка измененного списка
 def update_listbox(search_term=""):
   global current_page
   start_index = (current_page - 1) * ITEMS_PER_PAGE
@@ -68,45 +75,85 @@ def update_listbox(search_term=""):
   displayed_items = filtered_items[start_index:end_index]
 
   for item in displayed_items:
+    expiration_date = expiration_dates[item].strftime('%d-%m-%Y')
     quantity = item_quantities[item]
     item_frame = Frame(listbox)
     item_frame.pack(fill=X)
 
-    item_label = Label(item_frame, text=f"{item} ({quantity})",bg="white",width=37)
+    item_label = Label(item_frame, text=f"{item} ({quantity})",bg="white",width=22)
     item_label.pack(side=LEFT)
+    expiration_label = Label(item_frame, text=f"до: {expiration_date}",bg="white",width=12)
+    expiration_label.pack(side=LEFT)
 
     add_button = Button(item_frame, text="+", command=lambda item=item: update_quantity(item, 1), width=2)
     add_button.pack(side=RIGHT)
     sub_button = Button(item_frame, text="-", command=lambda item=item: update_quantity(item, -1), width=2)
     sub_button.pack(side=RIGHT)
+    change_button = Button(item_frame, text="⌫",command=lambda item=item: update_expirations_date(item), width=2)
+    change_button.pack(side=RIGHT)
 
   update_page_buttons()
-
+  auto_prev_page()
 #------------------------------------------------------------------------------
+#изменение даты до того как продукт просрочится
+def update_expirations_date(item):
+    try:
+        new_date_str = simpledialog.askstring("Изменение срока годности", "Введите новый срок годности в формате ДД.ММ.ГГГГ:", initialvalue=expiration_dates.get(""))
+        if new_date_str:
+                new_date = datetime.strptime(new_date_str, "%d.%m.%Y").date()
+                expiration_dates[item] = new_date
+                update_listbox()
+    except ValueError:
+            messagebox.showerror("Ошибка", "Неверный формат даты. Используйте ДД.ММ.ГГГГ")
+#------------------------------------------------------------------------------
+#блокировка кнопок навигации
 def update_page_buttons():
   total_pages = (len(item_quantities) + ITEMS_PER_PAGE - 1) // ITEMS_PER_PAGE
-  prev_button.config(state=("disabled" if current_page == 1 else "normal"))
-  next_button.config(state=("disabled" if current_page == total_pages else "normal"))
-
+  prev_button.config(state=("disabled" if (current_page == 1 or len(item_quantities) == 0) else "normal"))
+  next_button.config(state=("disabled" if (current_page == total_pages or len(item_quantities) == 0 ) else "normal"))
 #------------------------------------------------------------------------------
+#переход на предыдущую страницу
 def prev_page():
     global current_page
     current_page -= 1
     update_listbox()
-
 #------------------------------------------------------------------------------
+#переход на следующую страницу
 def next_page():
     global current_page
     current_page += 1
     update_listbox()
-
+#------------------------------------------------------------------------------
+#автопереход на предыдущую страницу если вы находились
+#на последней странице и на ней кончились элементы
+def auto_prev_page():
+    global current_page
+    if (current_page == ((len(item_quantities) + ITEMS_PER_PAGE - 1) // ITEMS_PER_PAGE) + 1):
+        current_page -= 1
+        update_listbox()
 #------------------------------------------------------------------------------
 root = Tk()
 root.title("Холодильник")
 root.resizable(False, False)
 
+expiration_dates = {
+    "Яблоко": date(2024, 2, 15),
+    "Банан": date(2024, 2, 28),
+    "Апельсин": date(2024, 3, 8),
+    "Груша": date(2024, 3, 8),
+    "Киви": date(2024, 3, 8),
+    "Манго": date(2024, 3, 8),
+    "Ананас": date(2024, 3, 8),
+    "Виноград": date(2024, 3, 8),
+    "Арбуз": date(2024, 3, 8),
+    "Дыня": date(2024, 3, 8),
+    "Персик": date(2024, 3, 8),
+    "Нектарин": date(2024, 3, 8)
+}
+
+
 item_quantities = {
-    "Яблоко": 5,
+    "Яблоко": 5, 
     "Банан": 3,
     "Апельсин": 2,
     "Груша": 1,
