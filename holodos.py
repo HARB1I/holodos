@@ -34,8 +34,12 @@ def toggle_search_frame(visible):
 #------------------------------------------------------------------------------
 #поисковик
 def search_listbox(event=None):
+  global current_page
   search_term = search_entry.get().lower()
   update_listbox(search_term)
+  if search_entry.get():
+    current_page = 1
+    update_listbox()
 
 #------------------------------------------------------------------------------
 #удаление продуктов из списка
