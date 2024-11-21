@@ -109,8 +109,8 @@ def update_expirations_date(item):
 #блокировка кнопок навигации
 def update_page_buttons():
   total_pages = (len(item_quantities) + ITEMS_PER_PAGE - 1) // ITEMS_PER_PAGE
-  prev_button.config(state=("disabled" if (current_page == 1 or len(item_quantities) == 0) else "normal"))
-  next_button.config(state=("disabled" if (current_page == total_pages or len(item_quantities) == 0 ) else "normal"))
+  prev_button.config(state=("disabled" if (current_page == 1) else "normal"))
+  next_button.config(state=("disabled" if (current_page == total_pages or len(item_quantities) == 0) else "normal"))
 #------------------------------------------------------------------------------
 #переход на предыдущую страницу
 def prev_page():
