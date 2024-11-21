@@ -218,6 +218,8 @@ root.columnconfigure(0, weight=1)
 root.columnconfigure(1, weight=1)
 root.rowconfigure(1, weight=1)
 
-update_listbox()  
+update_listbox()
+change_image()
+change_image()
 
 root.mainloop()
