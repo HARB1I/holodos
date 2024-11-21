@@ -114,9 +114,6 @@ def update_page_buttons():
   if search_entry.get():
       prev_button.config(state="disabled")
       next_button.config(state="disabled")
-  else:
-      prev_button.config(state="normal")
-      next_button.config(state="normal")
 #------------------------------------------------------------------------------
 #переход на предыдущую страницу
 def prev_page():
