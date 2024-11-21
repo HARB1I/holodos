@@ -6,6 +6,7 @@ from datetime import *
 search_frame_visible = False
 ITEMS_PER_PAGE = 8
 current_page = 1
+current_page_copy = 1
 
 #------------------------------------------------------------------------------
 #открывание и закрывание холодильника
@@ -30,17 +31,18 @@ def toggle_search_frame(visible):
     search_frame.grid(row=1, column=1, rowspan=2, sticky="nsew", padx=15)
   else:
     search_frame.grid_forget()
-
 #------------------------------------------------------------------------------
 #поисковик
 def search_listbox(event=None):
-  global current_page
+  global current_page, current_page_copy
   search_term = search_entry.get().lower()
   update_listbox(search_term)
   if search_entry.get():
     current_page = 1
-    update_listbox()
-
+    update_listbox(search_term)
+  if len(search_entry.get()) == 1:
+    current_page = current_page_copy
+  
 #------------------------------------------------------------------------------
 #удаление продуктов из списка
 def update_quantity(item, amount):
@@ -121,15 +123,17 @@ def update_page_buttons():
 #------------------------------------------------------------------------------
 #переход на предыдущую страницу
 def prev_page():
-    global current_page
+    global current_page, current_page_copy
     current_page -= 1
     update_listbox()
+    current_page_copy = current_page
 #------------------------------------------------------------------------------
 #переход на следующую страницу
 def next_page():
-    global current_page
+    global current_page, current_page_copy
     current_page += 1
     update_listbox()
+    current_page_copy = current_page
 #------------------------------------------------------------------------------
 #автопереход на предыдущую страницу если вы находились
 #на последней странице и на ней кончились элементы
