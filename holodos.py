@@ -128,7 +128,7 @@ def next_page():
 #на последней странице и на ней кончились элементы
 def auto_prev_page():
     global current_page
-    if (current_page == ((len(item_quantities) + ITEMS_PER_PAGE - 1) // ITEMS_PER_PAGE) + 1):
+    if (current_page == ((len(item_quantities) + ITEMS_PER_PAGE - 1) // ITEMS_PER_PAGE) + 1) and current_page > 1:
         current_page -= 1
         update_listbox()
 #------------------------------------------------------------------------------
