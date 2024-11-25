@@ -12,7 +12,7 @@ current_page_copy = 1
 # ------------------------------------------------------------------------------
 # открывание и закрывание холодильника
 def change_image():
-    global current_image, search_frame_visible
+    global current_image
     if current_image == image1:
         label.config(image=image2)
         current_image = image2
