@@ -35,6 +35,8 @@ def resize_and_center(window_width, window_height):
     x_cordinate = int((screen_width / 2) - (window_width / 2))
     y_cordinate = int((screen_height / 2) - (window_height / 2))
     root.geometry("{}x{}+{}+{}".format(window_width, window_height, x_cordinate, y_cordinate))
+    
+    
 # ------------------------------------------------------------------------------
 # появление и исчезновение списка
 def toggle_search_frame(visible):
