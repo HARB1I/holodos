@@ -28,6 +28,17 @@ def change_image():
 
 
 # ------------------------------------------------------------------------------
+#начальная настройка
+def Init():
+    resize_and_center(250, 390)
+    search_frame.grid(row=1, column=0, sticky="nsew")
+    root.columnconfigure(0, weight=1)
+    root.columnconfigure(1, weight=1)
+    root.rowconfigure(1, weight=1)
+    update_listbox()
+    
+    
+# ------------------------------------------------------------------------------
 #установка приложения по центру экрана
 def resize_and_center(window_width, window_height):
     screen_width = root.winfo_screenwidth()
@@ -256,11 +267,6 @@ add_item_button = Button(add_item_frame, text="Добавить", command=add_it
 add_item_button.grid(row=0, column=2, padx=5)
 # -----------------------------------------------------------------------------------------
 
-resize_and_center(250, 390)
-search_frame.grid(row=1, column=0, sticky="nsew")
-root.columnconfigure(0, weight=1)
-root.columnconfigure(1, weight=1)
-root.rowconfigure(1, weight=1)
+Init()
 
-update_listbox()
 root.mainloop()
