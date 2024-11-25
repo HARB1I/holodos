@@ -1,6 +1,5 @@
 from tkinter import *
-from tkinter import simpledialog
-from tkinter import messagebox
+from tkinter import simpledialog, messagebox
 from datetime import *
 
 search_frame_visible = False
