@@ -71,10 +71,10 @@ def search_listbox(event=None):
 # ------------------------------------------------------------------------------
 # удаление продуктов из списка
 def update_quantity(item, amount):
-    item_quantities[item] += amount
-    if item_quantities[item] <= 0:
-        del item_quantities[item]
-        del expiration_dates[item]
+    item_quantities[item]["value"] += amount
+    if item_quantities[item]["value"] <= 0:
+        del item_quantities[item]["value"]
+        del item_quantities[item]["date"]
     update_listbox()
 
 
@@ -86,8 +86,7 @@ def add_item():
         if new_item in item_quantities:
             messagebox.showwarning("Ошибка", "Этот продукт уже существует!")
         else:
-            item_quantities[new_item] = 0
-            expiration_dates[new_item] = date(2024, 1, 1)
+            item_quantities[new_item] = {"value": 0, "date": date(2024, 1, 1)}
             update_listbox()
             new_item_entry.delete(0, END)
     else:
@@ -108,8 +107,8 @@ def update_listbox(search_term=""):
     displayed_items = filtered_items[start_index:end_index]
 
     for item in displayed_items:
-        expiration_date = expiration_dates[item].strftime('%d-%m-%Y')
-        quantity = item_quantities[item]
+        expiration_date = item_quantities[item]["date"].strftime('%d-%m-%Y')
+        quantity = item_quantities[item]["value"]
         item_frame = Frame(listbox)
         item_frame.pack(fill=X)
 
@@ -134,11 +133,11 @@ def update_listbox(search_term=""):
 def update_expirations_date(item):
     try:
         new_date_str = simpledialog.askstring("Изменение срока годности",
-                                              f"Введите новый срок годности продукта \"{item}\" в формате ДД.ММ.ГГГГ:",
-                                              initialvalue=expiration_dates.get(""))
+                                                f"Введите новый срок годности продукта \"{item}\" в формате ДД.ММ.ГГГГ:",
+                                                initialvalue=item_quantities.get(""))
         if new_date_str:
             new_date = datetime.strptime(new_date_str, "%d.%m.%Y").date()
-            expiration_dates[item] = new_date
+            item_quantities[item]["date"] = new_date
             update_listbox()
     except ValueError:
         messagebox.showwarning("Ошибка", "Неверный формат даты. Используйте ДД.ММ.ГГГГ")
@@ -189,34 +188,19 @@ root = Tk()
 root.title("Холодильник")
 root.resizable(False, False)
 
-expiration_dates = {
-    "Яблоко": date(2024, 2, 15),
-    "Банан": date(2024, 2, 28),
-    "Апельсин": date(2024, 3, 8),
-    "Груша": date(2024, 3, 8),
-    "Киви": date(2024, 3, 8),
-    "Манго": date(2024, 3, 8),
-    "Ананас": date(2024, 3, 8),
-    "Виноград": date(2024, 3, 8),
-    "Арбуз": date(2024, 3, 8),
-    "Дыня": date(2024, 3, 8),
-    "Персик": date(2024, 3, 8),
-    "Нектарин": date(2024, 3, 8)
-}
-
 item_quantities = {
-    "Яблоко": 5,
-    "Банан": 3,
-    "Апельсин": 2,
-    "Груша": 1,
-    "Киви": 2,
-    "Манго": 7,
-    "Ананас": 4,
-    "Виноград": 9,
-    "Арбуз": 1,
-    "Дыня": 2,
-    "Персик": 3,
-    "Нектарин": 5
+    "Яблоко": {"value": 5, "date": date(2024, 2, 15)},
+    "Банан": {"value": 3, "date": date(2024, 2, 28)},
+    "Апельсин": {"value": 2, "date": date(2024, 3, 8)},
+    "Груша": {"value": 1, "date": date(2024, 3, 8)},
+    "Киви": {"value": 2, "date": date(2024, 3, 8)},
+    "Манго": {"value": 7, "date": date(2024, 3, 8)},
+    "Ананас": {"value": 4, "date": date(2024, 2, 15)},
+    "Виноград": {"value": 9, "date": date(2024, 3, 8)},
+    "Арбуз": {"value": 3, "date": date(2024, 2, 15)},
+    "Дыня": {"value": 2, "date": date(2024, 3, 8)},
+    "Персик": {"value": 3, "date": date(2024, 2, 15)},
+    "Нектарин": {"value": 5, "date": date(2024, 2, 15)}
 }
 
 image1 = PhotoImage(file="holodos_1.png")
