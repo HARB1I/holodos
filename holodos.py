@@ -2,7 +2,6 @@ from tkinter import *
 from tkinter import simpledialog, messagebox
 from datetime import *
 
-search_frame_visible = False
 ITEMS_PER_PAGE = 8
 current_page = 1
 current_page_copy = 1
